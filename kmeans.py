@@ -7,7 +7,7 @@ class DistanceMetric(Enum):
     COSINE = "cosine"
 
 class KMeans:
-    def __init__(self,k=3,iterations=100, formula=DistanceMetric.EUCLIDEAN):
+    def __init__(self, k=3, iterations=100, formula=None):
         self.k = k
         self.iterations = iterations
         self.formula = formula
@@ -21,7 +21,8 @@ class KMeans:
         elif self.formula == DistanceMetric.COSINE:
             return 1 - (np.dot(x1, x2) / (np.linalg.norm(x1) * np.linalg.norm(x2))) # Cosine distance
         else:
-            raise ValueError("Invalid formula")
+            p = x1.shape[0]
+            return np.sum(np.abs(x1 - x2) ** p) ** (1 / p) # Minkowski distance
 
     def random_centroids(self, X):
         np.random.seed(23)
